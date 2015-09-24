@@ -16,16 +16,10 @@ struct TreeNode
     size_t CountEdgesForEvenTree() const {
         size_t edges = 0;
 
-        if (v == 1) {
-            for (auto&& c : children) edges += c.CountEdgesForEvenTree();
-            return edges;
-        }
-        if (children.empty() || !(allChildCount & 1))
-            return edges;
-
-        if (allChildCount & 1) {
-            edges = 1;
-            for (auto&& c : children) edges += c.CountEdgesForEvenTree();
+        for (auto&& c : children) {
+            if (c.allChildCount & 1)
+                edges += 1;
+            edges += c.CountEdgesForEvenTree();
         }
         return edges;
     }
