@@ -11,7 +11,24 @@ struct TreeNode
     int v;
     std::vector<TreeNode> children;
 
-    TreeNode(int vertice) : v(vertice) {}
+    TreeNode(int key) : v(key) {}
+
+    size_t CountEdgesForEvenTree() const {
+        size_t edges = 0;
+
+        if (v == 1) {
+            for (auto&& c : children) edges += c.CountEdgesForEvenTree();
+            return edges;
+        }
+        if (children.empty() || !(allChildCount & 1))
+            return edges;
+
+        if (allChildCount & 1) {
+            edges = 1;
+            for (auto&& c : children) edges += c.CountEdgesForEvenTree();
+        }
+        return edges;
+    }
 
     bool AddChild(int parent, int index) {
         if (parent == v) {
@@ -25,11 +42,14 @@ struct TreeNode
         return false;
     }
 
-    size_t GetChildCount() const {
-        auto count = children.size();
-        for (auto&& c : children) count += c.GetChildCount();
-        return count;
+    size_t allChildCount;
+
+    size_t CountChild() {
+        allChildCount = children.size();
+        for (auto&& c : children) allChildCount += c.CountChild();
+        return allChildCount;
     }
+
 };
 
 int main() {
@@ -58,6 +78,10 @@ int main() {
             if (!root.AddChild(vertices.back().second, vertices.back().first))
                 return -1;
             vertices.pop_back();
+        }
+
+        if (root.CountChild()) {
+            cout << root.CountEdgesForEvenTree() << endl;
         }
     }
     return 0;
