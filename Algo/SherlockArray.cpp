@@ -18,7 +18,7 @@ int main()
         if (cin >> N) {
             vector<int> v;
             copy_n(istream_iterator<int>(cin), N, back_inserter(v));
-            bool result = false;
+            bool result = v.size() == 1;
 
             if (v.size() > 2) {
                 for (int left = 0, right = v.size()-1, sumLeft = v[0], sumRight = v[v.size()-1]; left < right; ) {
